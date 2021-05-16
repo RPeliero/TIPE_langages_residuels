@@ -1,0 +1,462 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage{amssymb}
+\usepackage{amsmath}
+
+
+\title{Une question sur les langages rationnels}
+\author{}
+\date{}
+
+\begin{document}
+
+\maketitle
+\tableofcontents
+
+
+\section{Introduction}
+
+\subsection{Définitions}
+
+\subsubsection{Lettres et mots}
+
+On se donne un ensemble $\Sigma$, fini ou non, qu'on nommera \textit{alphabet}. Ses éléments seront appelés les \textit{lettres}.
+\\
+
+On se permet d'utiliser l'étoile de Kleen sur les ensembles :
+
+$$\Sigma^* := \bigcup_{n \in \mathbb{N}} \Sigma^n$$
+
+Où $\Sigma^n$ est l'ensemble des $n$-uplets de lettres, dont on se permettra de noter les éléments abusivement comme suit :
+
+$$ a_1a_2...a_n := (a_1,a_2,...,a_n)$$
+
+On appellera \textit{mot} tout élément de $\Sigma^*$.
+
+\subsubsection{Expressions régulières}
+
+Une \textit{expression régulière} est un mot $f$ de $(\Sigma \cup \{ \cdot \; ; \; | \; ; \; * \: ; \: ( \; ; \; ) \; \})^*$ vérifiant une des propriétés suivantes :
+
+- $f \in \Sigma$
+
+- $f = \phi$
+
+- $f = f_1 \cdot f_2$ où $f_1$ et $f_2$ sont des expressions régulières
+
+- $f = f_1 | f_2$ où $f_1$ et $f_2$ sont des expressions régulières
+
+- $f = (f_0)^*$ où $f_0$ est une expression régulière
+\\
+
+Ainsi, " $(a|b)^*\cdot ((b \cdot a) | a) $ " est une expression régulière sur l'alphabet $\{ a ; b\}$
+\\
+\\
+
+\subsubsection{Langage rationnel}
+
+Soit $f$ une expression régulière, on note $\mathcal{L}(f)$ l'ensemble des mots reconnus (ou dénotés) par $f$. On parlera de \textit{langage rationnel} décrit par $f$. On dira également que $f$ s'interprète en $\mathcal{L}(f)$. 
+
+Ces langages sont définis inductivement comme suit :
+
+- $\mathcal{L}(\phi) = \phi$
+
+- $\forall a \in \Sigma, \mathcal{L}(a) = \{a\}$
+
+- Pour toutes expressions régulières $f_1$ et $f_2$ :
+$$\mathcal{L}(f_1 | f_2) = \mathcal{L}(f_1) \cup \mathcal{L}(f_2)$$
+
+- Pour toute expression régulière $f$ : 
+$$\mathcal{L}(f^*) = \mathcal{L}(f)^* := \bigcup_{n \in \mathbb{N}} \mathcal{L}(f)^n$$
+
+- Pour toutes expressions régulières $f_1$ et $f_2$ :
+$$\mathcal{L}(f_1 \cdot f_2) = \mathcal{L}(f_1) \cdot \mathcal{L}(f_2) := \{ m_1 \cdot m_2 \; ; (m_1,m_2) \in \mathcal{L}(f_1) \times \mathcal{L}(f_2) \}$$
+
+
+\subsubsection{Résiduel d'un langage}
+
+On appellera \textit{résiduel d'un langage $L$ par rapport à un mot $m$} l'ensemble :
+
+$$m^{-1}L := \{n \in \Sigma^* \; ; \; m \cdot n \in L \}$$
+
+De même, on définit le résiduel d'un langage $L$ par rapport à un langage $M$ comme étant :
+
+$$M^{-1}L := \{ n \in \Sigma^* \; ; \exists m \in M ; \; m \cdot n \in L \}$$
+
+\section{Énoncé du problème}
+
+\subsection{Énoncé}
+
+Le problème que l'on se pose s'énonce ainsi :
+
+$$\boxed{\textup{Caractériser les expressions régulières }f_1,f_2 \textup{ telles que : } \mathcal{L}(f_1)^{-1}\mathcal{L}(f_1 \cdot f_2) = \mathcal{L}(f_2)}$$
+
+
+\subsection{Remarque}
+
+On sait par avance que, dès lors que $\mathcal{L}(f_1) \neq \varnothing$ :
+
+$$\forall m_2 \in \mathcal{L}(f_2), \forall m_1 \in \mathcal{L}(f_1), m_1 \cdot m_2 \in \mathcal{L}(f_1 \cdot f_2)$$
+
+Autrement dit, quelques soient $f_1$ et $f_2$, on a :
+
+$$\mathcal{L}(f_2) \subset \mathcal{L}(f_1)^{-1}\mathcal{L}(f_1 \cdot f_2)$$
+
+Le problème se pose donc sur l'inclusion réciproque.
+
+\section{Quelques propriétés sur les langages résiduels de l'interprétation d'une expression régulière}
+
+\subsection{Formulaire utile}
+On se donne, dans cette partie, deux expression régulières $f_1$ et $f_2$, deux mots $m_1,m_2 \in \Sigma^*$, ainsi que deux lettres distinctes $a,b \in \Sigma$. On a alors les propriétés suivantes.
+\\
+
+1) $a^{-1}\mathcal{L}(a) = \varepsilon$
+\\
+
+2) $a^{-1}\mathcal{L}(b) = \varnothing$
+\\
+
+3) $m_1^{-1}\mathcal{L}(f_1 | f_2) = m_1^{-1}\mathcal{L}(f_1) \cup m_1^{-1}\mathcal{L}(f_2)$
+\\
+
+4) Si $\varepsilon \notin \mathcal{L}(f_1)$, alors $a^{-1}\mathcal{L}(f_1 \cdot f_2) = (a^{-1}\mathcal{L}(f_1))\cdot\mathcal{L}(f_2)$
+\\
+
+5) Si $\varepsilon \in \mathcal{L}(f_1)$, alors $a^{-1}\mathcal{L}(f_1 \cdot f_2) = (a^{-1}\mathcal{L}(f_1))\cdot\mathcal{L}(f_2) \cup a^{-1}\mathcal{L}(f_2)$
+\\
+
+6) $(m_1 \cdot m_2)^{-1}\mathcal{L}(f_1) = m_2^{-1}(m_1^{-1}\mathcal{L}(f_1))$
+
+\subsection{Théorème de Myhill-Nerode}
+
+$$\boxed{\textup{Un langage est reconnaissable si et seulement si il a un nombre fini de résiduels}}$$
+
+\section{Étude de cas particuliers}
+
+Pour commencer, à défaut de résoudre d'emblée le cas général, semblant très compliqué, on va se restreindre à des cas particuliers. Notamment, on se propose de sélectionner des expressions régulières particulières, et de vérifier si elles vérifient l'égalité du problème.
+
+\subsection{Un alphabet restreint}
+
+On suppose dans cette partie que $\Sigma = \{a ; b\}$.
+
+\subsubsection{Cas où $f_1 \in \Sigma$}
+
+On va noter $f_1 = a \in \Sigma$, et $f_2 = f$ dans cette partie
+
+On cherche donc à montrer que :
+$$\mathcal{L}(a)^{-1}\mathcal{L}(a \cdot f) = \mathcal{L}(f)$$
+
+Puisqu'une inclusion est évidente, d'après la remarque qui précède, on va se contenter de montrer la seconde :
+
+Soit $m \in \mathcal{L}(a)^{-1}\mathcal{L}(a \cdot f)$. On sait que $a \cdot m \in \mathcal{L}(a \cdot f)$.
+
+Autrement dit :
+$$\exists m' \in \mathcal{L}(f) ; a \cdot m = a \cdot m'$$
+
+Ainsi, par régularité, il vient que :
+
+$$\exists m' \in \mathcal{L}(f) ; m = m'$$
+
+D'où $m \in \mathcal{L}(f)$, et l'inclusion cherchée.
+\\
+
+Conclusion :
+$$\forall f, \forall a \in \Sigma, \boxed{\mathcal{L}(a)^{-1}\mathcal{L}(a \cdot f) = \mathcal{L}(f)}$$
+(et ce, quelque soit $\Sigma$)
+
+\subsubsection{Cas où $f_1 = a|b$ et $f_2 = f$}
+
+On se donne deux lettres distinctes $a,b \in \Sigma$, on suppose que $f_1 = a|b$ et on note $f_2 = f$.
+
+On souhaite montrer que :
+$$\mathcal{L}(a|b)^{-1}\mathcal{L}((a|b) \cdot f) = \mathcal{L}(f)$$
+
+Tout d'abord, on peut vérifier assez facilement que :
+
+$$\mathcal{L}(a|b)^{-1}\mathcal{L}((a|b) \cdot f) = [\mathcal{L}(a)^{-1}\mathcal{L}((a|b) \cdot f)] \cup [\mathcal{L}(b)^{-1}\mathcal{L}((a|b) \cdot f)]$$
+
+Ainsi, soit $m \in \mathcal{L}(a|b)^{-1}\mathcal{L}((a|b) \cdot f)$, deux cas de figure se présentent :
+
+Ou bien $am \in \mathcal{L}((a|b) \cdot f)$, ou bien $bm \in \mathcal{L}((a|b) \cdot f)$.
+
+Or, de par l'unicité du préfixe de longueur $1$, les deux cas se résument à :
+
+$a \cdot m \in \mathcal{L}(a \cdot f)$ ou $b \cdot m \in \mathcal{L}(b \cdot f)$
+
+Autrement dit, d'après la démonstration du cas précédent, où $f_1 \in \Sigma$, on en déduit que :
+
+$m \in \mathcal{L}(f)$
+\\
+
+Conclusion : de par cet argument d'unicité du préfixe de longueur $1$, on peut généraliser le résultat à tout choix de lettres distinctes de l'alphabet :
+
+$$\forall f, \forall n \in \mathbb{N}_{|\Sigma |},\forall a_1,...,a_n \in \Sigma; i \neq j \Rightarrow a_i \neq a_j, $$
+$$\boxed{\mathcal{L}(a_1 | ... | a_n)^{-1}\mathcal{L}((a_1 | ... | a_n) \cdot f) = \mathcal{L}(f)}$$
+
+
+\subsubsection{Un premier cas où l'inclusion non triviale n'est pas vérifiée}
+
+Dans le cas présent, on suppose que $f_1 = (a | (a \cdot b))$ et $f_2 = ((a \cdot a) | (a \cdot b))$
+
+On va se permettre d'omettre le symbole de concaténation, par soucis de lisibilité. On a alors :
+$$\mathcal{L}(f_1f_2) = \{ aaa ; aab ; abaa ; abab \}$$
+
+On remarque alors que :
+$$m = bab \in \mathcal{L}(f_1)^{-1}\mathcal{L}(f_1f_2)$$
+
+Car $am = abab \in \mathcal{L}(f_1f_2)$
+
+Cependant, $m \notin \mathcal{L}(f_2) = \{aa ; ab \}$
+
+
+Ainsi, dans ce cas précis :
+
+$$[\mathcal{L}(f_1)^{-1}\mathcal{L}(f_1f_2)]\backslash \mathcal{L}(f_2) \neq \phi$$
+\\
+
+\textbf{Généralisation}
+
+Si $f_1$ et $f_2$ sont telles qu'il existe $m_0 , m_1 \in \mathcal{L}(f_1)$, et $r \in \mathcal{L}(f_2)$ tels que :
+
+$$\exists s \in \Sigma* ; [m_1 = m_0s] \wedge [sr \notin \mathcal{L}(f_2)]$$
+
+Alors, puisque $m_1r \in \mathcal{L}(f_1f_2), m_0sr \in \mathcal{L}(f_1f_2)$
+
+Autrement dit :
+
+$$sr \in \mathcal{L}(f_1)^{-1}\mathcal{L}(f_1f_2)$$
+
+Or, comme on l'a supposé, $sr \notin \mathcal{L}(f_2)$
+\\
+
+\newpage
+
+\section{Une condition nécessaire}
+
+Soit $\Sigma$ un alphabet fini, $\mathcal{R}(\Sigma)$, l'ensemble des expressions régulières sur $\Sigma$.
+\\
+\\
+On se donne $f_1,f_2 \in \mathcal{R}(\Sigma)$, $\mathcal{A}_1$ reconnaissant $L_1 := \mathcal{L}(f_1)$, et $\mathcal{A}_2$ reconnaissant $L_2 := \mathcal{L}(f_2)$.
+\\
+On pose $\mathcal{A}_1 = (Q_1, q_{0,1},F_1,\delta_1) \; , \; \mathcal{A}_2 = (Q_2, q_{0,2},F_2,\delta_2)$
+\\
+On se donne également $\mathcal{A} = (Q, q_{0,1}, F_2, \delta)$, reconnaissant $L_1 \cdot L_2$. (on détaillera sa construction plus tard)
+\\
+\\
+\subsection{Une question intermédiaire : $L^{-1}L$}
+
+Par définition, soit $L \subset \Sigma^*$, on a :
+$$L' = L^{-1}L := \{s \in \Sigma^* ; \exists m \in L ; m' = ms \in L\}$$
+\\
+Soit $s \in L'$, on trouve $m \in L$ tel que $m' = ms \in L$.
+\\
+En supposant que le langage $L$ soit reconnaissable, alors, on trouve un automate $\mathcal{A} = (Q,q_0,F,\delta)$ reconnaissant $L$.
+\\
+Puisque $m \in L$, on trouve $q \in F$ tel que $\delta^*(q_0, m) = q$.
+\\
+De plus, comme $m' \in L$, on trouve $q' \in F$ tel que $\delta^*(q_0,m')=q'$.
+\\
+Or :
+$$q' = \delta^*(q_0,m') = \delta^*(q,s)$$
+Autrement dit, on a trouvé pour $s$ deux états finaux $q,q'$ tels que $\delta^*(q,s)=q'$.
+\\
+Réciproquement, soit $s \in \Sigma^*$, tel qu'il existe $q,q' \in F; \delta^*(q,s)=q'$, alors :
+
+On trouve $m \in L; \delta^*(q_0,m)=q$
+
+On pose $m' = ms$.
+
+Ainsi :
+$$\delta^*(q_0,m') = \delta^*(q,s) = q' \in F$$
+\\
+D'où $m' \in L$, et donc, $s \in L'$.
+\\
+\\
+On a ainsi montré que :
+
+$$\boxed{L^{-1}L = \{ s \in \Sigma^* ; \exists (q,q') \in F' ; \delta^*(q,s) = q' \}}$$
+\\
+
+\subsection{Retour au problème}
+Soit $\tilde{L} := L_1^{-1}L_1$, l'ensemble des mots constituant des chemins entre deux états finaux de $\mathcal{A}_1$.
+\\
+Si l'on suppose $\tilde{L}L_2 \neq L_2$, alors, puisque d'évidence, $L_2 \subset \tilde{L}L_2$, on trouve $\tilde{m} \in \tilde{L} \backslash \{\varepsilon\}$ et $m_2 \in L_2$ tel que $\tilde{m}m_2 \notin L_2$.
+\\
+On trouve $(q_{f,1},q'_{f,1}) \in F_1^2$ tels que :
+$$\delta_1(q_{f,1},m)=q'_{f,1}$$
+On va également noter $q_{f,2} \in F_2$ tel que :
+$$\delta_2^*(q_{0,2},m_2) = q_{f,2}$$
+On trouve enfin $m_1 \in L_1$ tel que :
+$$\delta_1^*(q_{0,1},m_1) = q_{f,1}$$
+\\
+Alors, si l'on considère le mot $m_1\tilde{m}m_2$, on a :
+$$\delta^*(q_{0,1},m_1am_2) = \delta^*(\delta^*(q_{0,1},m_1),am_2)$$
+Ainsi :
+$$\delta^*(q_{0,1},m_1\tilde{m}m_2) = \delta^*(q_{f,1},\tilde{m}m_2)$$
+D'où :
+$$\delta^*(q_{0,1},m_1\tilde{m}m_2) = \delta^*(\delta(q_{f,1},\tilde{m}),m_2)$$
+C'est-à-dire :
+$$\delta^*(q_{0,1},m_1\tilde{m}m_2) = \delta^*(q'_{f,1},m_2)$$
+Et comme $q'_{f,1} \in F_1$, par construction de l'automate $\mathcal{A}$ :
+$$\delta^*(q_{0,1},m_1am_2) = q_{f,2} \in F_2$$
+\\
+Donc le mot $m_1\tilde{m}m_2$ est reconnu par l'automate $\mathcal{A}$.
+\\
+Autrement dit, $\tilde{m}m_2 \in L_1^{-1}(L_1 \cdot L_2) \backslash L_2$.
+\\
+\\
+On peut donc énoncer une condition nécessaire aux expressions régulières vérifiant l'égalité étudiée :
+$$L_1^{-1}(L_1 \cdot L_2) = L_2 \Rightarrow \tilde{L}L_2 = L_2$$
+De par le lemme d'Arden, puisque $\varepsilon \in \tilde{L}$, alors on ne peut pas affirmer que $L_2 = \tilde{L}^*$. Cependant, on sait que cette solution à l'équation est la plus petite au sens de l'inclusion. Ainsi, on a : 
+$$L_1^{-1}(L_1\cdot L_2) = L_2 \Rightarrow \tilde{L}^* \subset L_2$$
+\newpage
+
+\section{Sens réciproque}
+On se donne $f_1,f_2 \in \mathcal{R}(\Sigma)$ telles que, pour les notations prises dans la partie précédente :
+$$\tilde{L}^* \subset L_2$$
+\\
+Alors, pour tout mot $\tilde{m} \in \tilde{L}$, on trouve $q,q' \in F_1 ; \delta^*(q,\tilde{m}) = q'$. On notera par la suite : $q \xrightarrow{\tilde{m}} q'$.
+\\
+\subsection{Passage par les automates généralisés}
+
+D'après le théorème de Kleene (et particulièrement le sens réciproque de l'équivalence qu'il énonce), tout langage reconnaissable est notamment dénoté par une expression régulière.
+\\
+Pour décrire les langages du problème, et par soucis de clarté dans nos opérations sur les automates, nous nous servirons de la notion d'automate généralisé, qui autorise les transitions à être des expressions régulières, et non plus seulement des lettres. Cela va amplement simplifier les questions d'équivalences entre automates.
+\\
+La réduction de tels automates s'effectue par la méthode de Brzozowski et McCluskey d'élimination des états.
+\\
+On peut montrer que l'expressivité des automates généralisés est la même que celle des automates sur $\Sigma$.
+\\
+Ainsi, il suffit qu'une propriété soit vérifiée sur l'automate généralisé pour que nous revenions aisément à un automate classique.
+\\
+\\
+En l'occurrence, nous allons montrer que dans un cas particulier du sens réciproque, la propriété est vérifiée :
+
+$$\boxed{\textup{\textbf{On suppose par la suite que : }} L_2 \backslash \tilde{L}^* \textup{ \textbf{est reconnaissable}}}$$
+
+(On précise qu'il s'agit ici d'une privation du langage $L_2$ des éléments du langage $\tilde{L}^*$, et non d'un résiduel, comme cela peut parfois être noté dans la littérature à ce sujet)
+
+Alors, $\tilde{L}$ étant fini, on conçoit aisément une expression régulière le dénotant, en sommant la totalité de ses mots. Puis, un passage global de cette expression à l'étoile de Kleene permet d'obtenir un expression dénotant $\tilde{L}^*$. On notera $f^*$ cette expression régulière.
+\\
+De même, $L_2 \backslash \tilde{L}^*$ étant reconnaissable, on trouve une autre expression régulière le dénotant. On la notera $g$
+\\
+Enfin, par somme des deux dernières, on obtient une expression régulière dénotant intégralement $L_2$.
+\\
+On a donc un automate généralisé $\mathcal{A}_{2,\mathcal{G}}$ à deux états : un initial $q_0$, acceptant, et un autre, $q_1$ acceptant. On a ensuite deux transitions :
+$$q_0 \overset{f}{\longrightarrow} q_0$$
+$$q_0 \overset{g}{\longrightarrow} q_1$$
+\\
+Puis, par procédé retour, en notant :
+$$\tilde{L} = \{ \tilde{m}_i \; ; i \in \mathbb{N}_n\}, \;\;\; n = |\tilde{L}|$$
+\\
+On a maintenant $n+1$ transitions :
+$$\forall i \in \mathbb{N}_n, q_0 \overset{\tilde{m}_i}{\longrightarrow} q_0$$
+$$q_0 \overset{g}{\longrightarrow} q_1$$.
+\\
+Puis, on continue de rebrousser chemin dans l'élimination des états, jusqu'à ce que toute transition ne soit étiquetée que par des mots de $\Sigma^*$ (on ne se permet plus que d'avoir des expressions régulières concaténées entre elles, mais pas des sommes ou des étoiles de Kleene).
+\\
+\\
+On obtient alors un automate $\mathcal{A}_{2,mots}$ d'une toute autre sorte : étiqueté par des mots plutôt que par des lettres. Cependant, cet automate est toujours fini. Et quitte à changer l'alphabet $\Sigma$, puisque le langage qu'il reconnaît est toujours le même (de par les opérations que l'on s'est permis d'effectuer sur les états et les transitions), sa version déterminisée reconnaît également $L_2$.
+\\
+\section{Une autre approche - à l'aide des dérivées de Brzozowski}
+
+\subsection{Définition}
+
+Soit $a \in \Sigma$, on définit la dérivée de Brzozowski par rapport à $a$ comme suit :
+
+$$\partial_a(\varnothing) = \partial_a(\varepsilon) = \varnothing$$
+$$\forall b \in \Sigma, \partial_a(b) = 
+\left \{ \begin{array}{cc}
+        \varnothing & \textup{ si } b \ne a \\
+        \varepsilon & \textup{ sinon }
+        \end{array}
+\right.$$
+
+$$\partial_a(f|g) = \partial_a(f) | \partial_a(g)$$
+$$\partial_a(f^*) = \partial_a(f)\cdot f^*$$
+$$\partial_a(f\cdot g) = (\partial_a(f)\cdot g )\;|\;( c(f)\partial_a(g))$$
+(où $c(f) = \varepsilon$ si $\varepsilon \in \mathcal{L}(f)$, et $\varnothing$ sinon) 
+
+Puis, de manière récursive, on définit :
+$$\forall a \in \Sigma, \forall m \in \Sigma^*, \;\; \partial_{ma} = \partial_a \circ \partial_m$$
+
+Avec notamment $\partial_\varepsilon (f) = f$
+
+\subsection{Une propriété sur les langages résiduels}
+$$\mathcal{L}(\partial_m(f)) = m^{-1}\mathcal{L}(f)$$
+
+Ainsi, en notant : $L_1 = \mathcal{L}(f_1)$ et $L_2 = \mathcal{L}(f_2)$, on a
+
+$$L_1^{-1}(L_1 \cdot L_2) = \bigcup_{m_1 \in L_1}m_1^{-1}\mathcal{L}(f_1\cdot f_2)$$
+
+D'où :
+
+$$\boxed{L_1^{-1}(L_1\cdot L_2) = \bigcup_{m_1 \in L_1}\mathcal{L}(\partial_{m_1}(f_1 \cdot f_2))}$$
+\\
+\\
+Or :
+$$\boxed{\forall m \in \Sigma^+, \partial_m(f\cdot g) =  \sum_{\underset{uv = m}{u,v \in \Sigma^*}} c \left (\partial_u(f)\right ) \cdot \partial_v(g) }$$
+
+Et en l'occurrence :
+
+$\forall m_1 \in L_1, \forall u,v ; uv = m_1, c(\partial_u(f_1)) = \varepsilon \Leftrightarrow u \in Pref(L_1)\cap L_1$
+\\
+Or, on sait que $L_1 \subset Pref(L_1)$. Donc $Pref(L_1) \cap L_1 = L_1$.
+\\
+\\
+Et ainsi, les $v$ correspondants complètent les $u$ de $L_1$ en un mot de $L_1$ : $v \in L_1^{-1}L_1 := \tilde{L}$.
+\\
+\\
+Notre équation devient donc :
+
+$$\tilde{L}^{-1}L_2=L_2$$
+\\
+Or, on le sait, $\varepsilon \in \tilde{L}$. Donc : $L_2 \subset \tilde{L}^{-1}L_2$.
+\\
+\\
+Pour ce qui est de l'inclusion réciproque, on cherche à savoir, pour un $m \in \tilde{L}^{-1}L_2$ quelconque fixé, à montrer qu'il appartient à $L_2$.
+
+Autrement dit, on cherche à montrer que :
+
+$$\forall m \in \tilde{L}^{-1}L_2, \;\;\; c(\partial_m(g)) = \varepsilon$$
+
+
+À savoir : $$\prod_{m \in \tilde{L}^{-1}L_2} c(\partial_m(g)) = \varepsilon$$
+
+(où la concaténation est notée multiplicativement)
+
+Or, on sait que la fonction $c$ est un morphisme pour la concaténation :
+
+$$c(e\cdot f) = c(e) \cdot c(f)$$
+
+D'où, l'équation à vérifier devient :
+
+$$c \left ( \prod_{m \in \tilde{L}^{-1}L_2} \partial_m(g) \right ) = \varepsilon $$
+
+\subsection{Concaténation de deux dérivées :}
+
+On va chercher une forme plus pratiquable pour la concaténation de deux dérivées d'une même expression par deux mots différents.
+\\
+Soit $L$ un langage, $m,m' \in L$, $f$ une expression régulière, en notant $L' = \mathcal{L}(f)$ :
+
+On veut une formule pour $\partial_m(f) \cdot \partial_{m'}(f)$
+
+Tout d'abord, en se servant de l'évaluation :
+
+$$\mathcal{L}(\partial_m(f) \cdot \partial_{m'}(f))=\mathcal{L}(\partial_m(f))\cdot\mathcal{L}(\partial_{m'}(f))=m^{-1}L' \cdot m'^{-1}L'$$
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+\end{document}
